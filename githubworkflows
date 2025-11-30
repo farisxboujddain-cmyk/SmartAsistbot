@@ -1,1 +1,33 @@
+api.yml name: Run API Server
 
+on:
+  # تشغيل تلقائي كل 5 دقائق
+  schedule:
+    - cron: '*/5 * * * *'
+  # تشغيل يدوي عند الضغط على زر في GitHub
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm install express node-fetch
+
+      - name: Run the API script
+        run: node api.js
+        env:
+          # لا نحتاج متغيرات بيئية هنا للبساطة
